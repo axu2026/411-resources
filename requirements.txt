@@ -1,0 +1,28 @@
+Agile Requirements
+
+1
+a) As a vanilla git power-user that has never seen GiggleGit before, I want to… be able to have compatibility with my other pre-existing git accounts/repositories to allow for seamless integration.
+b) As a team lead onboarding an experienced GiggleGit user, I want to… be able to set up team repositories and be able to add new members with relative ease to improve set-up convenience.
+
+2
+As a project manager sharing a repository with several team members, I want to be able to control and manage permissions for my team members.
+	Task: Create security functionality for repositories and team spaces
+		Ticket 1: Add customizable roles for team members
+			Create a system that allows a repository’s owner to make and customize roles. These roles can be assigned different permissions in the repository at the owner’s liking.
+		Ticket 2: Add configurable repository properties
+			Create security settings for repositories that an owner can customize to their liking, such as visibility, merging rules, etc.
+
+3
+The story does not provide a why or a benefit, and the type of user is unspecified. This is a non-functional requirement.
+
+
+Formal Requirements
+
+Goal: Implement the right “snicker” to play when syncing packages.
+Non-goal: Provide personalized user “snickers” depending on user data, contents of packages, and other preferences.
+	Non-functional requirement 1: Personalization
+		Functional requirement: User data will be saved in a database, and an algorithm will determine the best possible “snicker” for the specific user.
+		Functional requirement: Some users may find certain “snickers” annoying or undesirable, so the application should provide customization to the user.
+	Non-functional requirement 2: Machine-learning
+		Functional requirement: The implementation of machine-learning AI and advanced algorithms to implement data from the user database and provide information on popular “snicker” sounds.
+		Functional requirement: Data sampling will be done according to random sampling to obtain general user preferences and trends.
