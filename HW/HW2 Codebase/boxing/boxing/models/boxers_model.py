@@ -52,13 +52,19 @@ def create_boxer(name: str, weight: int, height: int, reach: float, age: int) ->
         ValueError: Invalid field or a boxer with the same name already exists
         sqlite3.Error: Database error
     """
+    logger.info(f"Received request to create a new boxer: {name}")
+
     if weight < 125:
+        logger.warning(f"Invalid weight provided: {weight}")
         raise ValueError(f"Invalid weight: {weight}. Must be at least 125.")
     if height <= 0:
+        logger.warning(f"Invalid height provided: {height}")
         raise ValueError(f"Invalid height: {height}. Must be greater than 0.")
     if reach <= 0:
+        logger.warning(f"Invalid reach provided: {reach}")
         raise ValueError(f"Invalid reach: {reach}. Must be greater than 0.")
     if not (18 <= age <= 40):
+        logger.warning(f"Invalid age provided: {age}")
         raise ValueError(f"Invalid age: {age}. Must be between 18 and 40.")
 
     try:
@@ -76,11 +82,14 @@ def create_boxer(name: str, weight: int, height: int, reach: float, age: int) ->
             """, (name, weight, height, reach, age))
 
             conn.commit()
+            logger.info(f"Boxer created successfully: {name}")
 
     except sqlite3.IntegrityError:
+        logger.error(f"Boxer, {name}, already exists.")
         raise ValueError(f"Boxer with name '{name}' already exists")
 
     except sqlite3.Error as e:
+        logger.error(f"Error while creating boxer: {e}")
         raise e
 
 
@@ -101,12 +110,15 @@ def delete_boxer(boxer_id: int) -> None:
 
             cursor.execute("SELECT id FROM boxers WHERE id = ?", (boxer_id,))
             if cursor.fetchone() is None:
+                logger.warning(f"Attempted to delete a boxer that does not exist with ID {boxer_id}.")
                 raise ValueError(f"Boxer with ID {boxer_id} not found.")
 
             cursor.execute("DELETE FROM boxers WHERE id = ?", (boxer_id,))
             conn.commit()
 
+            logger.info(f"Boxer with ID {boxer_id} successfully deleted.")
     except sqlite3.Error as e:
+        logger.error(f"Error while deleting boxer: {e}")
         raise e
 
 
@@ -136,11 +148,13 @@ def get_leaderboard(sort_by: str = "wins") -> List[dict[str, Any]]:
     elif sort_by == "wins":
         query += " ORDER BY wins DESC"
     else:
+        logger.warning("Provided argument for sort_by is invalid.")
         raise ValueError(f"Invalid sort_by parameter: {sort_by}")
 
     try:
         with get_db_connection() as conn:
             cursor = conn.cursor()
+            logger.info("Attempting to create a leaderboard for all boxers")
             cursor.execute(query)
             rows = cursor.fetchall()
 
@@ -160,9 +174,11 @@ def get_leaderboard(sort_by: str = "wins") -> List[dict[str, Any]]:
             }
             leaderboard.append(boxer)
 
+        logger.info("Leaderboard created.")
         return leaderboard
 
     except sqlite3.Error as e:
+        logger.error(f"Error while creating leaderboard: {e}")
         raise e
 
 
